@@ -1,0 +1,15 @@
+.ContactForm {
+	margin: 20px auto;
+	width: 70%;
+	text-align: center;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 3px #ccc;
+	padding: 6px;
+	box-sizing: border-box;
+}
+
+@media (max-width: 500px) {
+	.ContactForm {
+		width: 400px;
+	}
+}
