@@ -15,12 +15,7 @@ export class BurgerBuilder extends Component {
 		super(props);
 
 		this.state = {
-			// ingredients: null,
-			//totalPrice: INGREDIENTS_PRICES.base_price,
-			//purchasable: false,
 			purchasing: false
-			//loading: false,
-			//error: null
 		};
 	}
 
