@@ -165,7 +165,7 @@ export class ContactData extends Component {
 			</form>
 		);
 
-		if (this.state.loading) {
+		if (this.props.loading) {
 			form = <Spinner />;
 		}
 
@@ -181,13 +181,16 @@ export class ContactData extends Component {
 const mapStateToProps = (state) => {
 	return {
 		ings: state.ingredients,
-		price: state.totalPrice
+		price: state.totalPrice,
+		loading: state.loading
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
-	const onOrderBurger = (orderData) => {
-		dispatch(actionCreators.purchaseBurgerStart(orderData));
+	return {
+		onOrderBurger: (orderData) => {
+			dispatch(actionCreators.purchaseBurger(orderData));
+		}
 	};
 };
 
