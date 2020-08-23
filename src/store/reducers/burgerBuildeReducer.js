@@ -1,17 +1,17 @@
 import * as actionTypes from '../actions/actionTypes';
 
-const initialState = {
-	ingredients: null,
-	totalPrice: 2,
-	error: false
-};
-
 const INGREDIENTS_PRICES = {
 	base_price: 2,
 	bacon: 1,
 	cheese: 0.5,
 	salad: 0.5,
 	meat: 1.5
+};
+
+const initialState = {
+	ingredients: null,
+	totalPrice: INGREDIENTS_PRICES.base_price,
+	error: false
 };
 
 const reducer = (state = initialState, action) => {
@@ -38,6 +38,7 @@ const reducer = (state = initialState, action) => {
 			return {
 				...state,
 				ingredients: action.ingredients,
+				totalPrice: INGREDIENTS_PRICES.base_price,
 				error: false
 			};
 		case actionTypes.FETCH_INGREDIENTS_FAILED:
