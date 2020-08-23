@@ -1,0 +1,15 @@
+.AuthForm {
+	margin: 20px auto;
+	width: 60%;
+	text-align: center;
+	border: 1px solid #eee;
+	box-shadow: 0 2px 3px #ccc;
+	padding: 6px;
+	box-sizing: border-box;
+}
+
+@media (max-width: 500px) {
+	.AuthForm {
+		width: 350px;
+	}
+}
