@@ -39,7 +39,8 @@ export class Auth extends Component {
 					valid: false,
 					touched: false
 				}
-			}
+			},
+			isSignUp: true
 		};
 	}
 	///////////////////////////////////////////////////////////////
@@ -81,6 +82,20 @@ export class Auth extends Component {
 	};
 
 	///////////////////////////////////////////////////////////////
+	switchAuthModeHandler = (event) => {
+		event.preventDefault();
+		this.setState((prevState) => {
+			return {
+				isSignUp: !prevState.isSignUp
+			};
+		});
+	};
+	///////////////////////////////////////////////////////////////
+	signupHandler = (event) => {
+		event.preventDefault();
+		this.props.onAuth(this.state.controls.email.value, this.state.controls.password.value, this.state.isSignUp);
+	};
+
 	render() {
 		const formElementArray = [];
 		for (let key in this.state.controls) {
@@ -90,7 +105,7 @@ export class Auth extends Component {
 			});
 		}
 		let form = (
-			<form onSubmit={this.props.onAuth(this.state.email.value, this.state.password.value)}>
+			<form onSubmit={this.signupHandler}>
 				{formElementArray.map((formElement) => (
 					<Input
 						key={formElement.id}
@@ -103,7 +118,10 @@ export class Auth extends Component {
 						changed={(event) => this.inputChangedHandler(event, formElement.id)}
 					/>
 				))}
-				<Button btnType="Success">Authenticate</Button>
+				<Button btnType="Success">Submit</Button>
+				<Button btnType="Danger" clicked={this.switchAuthModeHandler}>
+					{this.state.isSignUp ? 'Sign up' : 'New User'}
+				</Button>
 			</form>
 		);
 		return <div className={classes.AuthForm}>{form}</div>;
@@ -112,7 +130,7 @@ export class Auth extends Component {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onAuth: (email, password) => dispatch(actionCreators.auth(email, password))
+		onAuth: (email, password, isSignUp) => dispatch(actionCreators.auth(email, password, isSignUp))
 	};
 };
 
