@@ -22,6 +22,20 @@ const authFail = (err) => {
 	};
 };
 
+const authLogout = () => {
+	return {
+		type: actionTypes.AUTH_LOGOUT
+	};
+};
+
+const checkAuthTimeout = (expirationTime) => {
+	return (dispatch) => {
+		setTimeout(() => {
+			dispatch(authLogout());
+		}, expirationTime);
+	};
+};
+
 export const auth = (email, password, isSignUp) => {
 	return (dispatch) => {
 		dispatch(authStart());
@@ -39,12 +53,11 @@ export const auth = (email, password, isSignUp) => {
 		axios
 			.post(url, authData)
 			.then((response) => {
-				console.log(response.data);
 				dispatch(authSuccess(response.data.idToken, response.data.localId));
+				dispatch(checkAuthTimeout(response.data.expiresIn * 1000));
 			})
 			.catch((err) => {
-				console.log(err);
-				dispatch(authFail(err));
+				dispatch(authFail(err.response.data.error));
 			});
 	};
 };

@@ -4,6 +4,7 @@ import Input from '../../components/UI/Input/Input';
 import Button from '../../components/UI/Button/Button';
 import classes from './Auth.module.css';
 import * as actionCreators from '../../store/actions/indexActions';
+import Spinner from '../../components/UI/Spinner/Spinner';
 
 export class Auth extends Component {
 	constructor(props) {
@@ -124,9 +125,30 @@ export class Auth extends Component {
 				</Button>
 			</form>
 		);
-		return <div className={classes.AuthForm}>{form}</div>;
+		if (this.props.loading) {
+			form = <Spinner />;
+		}
+
+		let errorMessage = null;
+
+		if (this.props.error) {
+			errorMessage = <p>{this.props.error.message}</p>;
+		}
+		return (
+			<div className={classes.AuthForm}>
+				{errorMessage}
+				{form}
+			</div>
+		);
 	}
 }
+
+const mapStateToProps = (state) => {
+	return {
+		loading: state.auth.loading,
+		error: state.auth.error
+	};
+};
 
 const mapDispatchToProps = (dispatch) => {
 	return {
@@ -134,4 +156,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(null, mapDispatchToProps)(Auth);
+export default connect(mapStateToProps, mapDispatchToProps)(Auth);

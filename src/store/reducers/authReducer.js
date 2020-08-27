@@ -17,6 +17,14 @@ const authSuccess = (state, action) => {
 	};
 };
 
+const authLogout = (state) => {
+	return {
+		...state,
+		token: null,
+		userId: null
+	};
+};
+
 const authReducer = (state = intialState, action) => {
 	switch (action.type) {
 		case actionTypes.AUTH_START:
@@ -33,6 +41,8 @@ const authReducer = (state = intialState, action) => {
 			};
 		case actionTypes.AUTH_SUCCESS:
 			return authSuccess(state, action);
+		case actionTypes.AUTH_LOGOUT:
+			return authLogout(state);
 		default:
 			return state;
 	}
