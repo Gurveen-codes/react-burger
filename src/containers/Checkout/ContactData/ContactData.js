@@ -99,7 +99,7 @@ export class ContactData extends Component {
 			orderData: formData
 		};
 
-		this.props.onOrderBurger(currentOrder);
+		this.props.onOrderBurger(currentOrder, this.props.tokenId);
 	};
 
 	///////////////////////////////////////////////////////////////
@@ -192,14 +192,15 @@ const mapStateToProps = (state) => {
 	return {
 		ings: state.burgerBuilder.ingredients,
 		price: state.burgerBuilder.totalPrice,
-		loading: state.order.loading
+		loading: state.order.loading,
+		tokenId: state.auth.token
 	};
 };
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		onOrderBurger: (orderData) => {
-			dispatch(actionCreators.purchaseBurger(orderData));
+		onOrderBurger: (orderData, tokenId) => {
+			dispatch(actionCreators.purchaseBurger(orderData, tokenId));
 		}
 	};
 };
