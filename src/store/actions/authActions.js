@@ -92,7 +92,6 @@ export const authCheckState = () => {
 				//Token but valid Expiration Date
 				dispatch(authSuccess(token, userId));
 				const expTime = new Date(expirationDate).getTime() - new Date().getTime();
-				console.log(expTime);
 
 				dispatch(checkAuthTimeout(expTime));
 			} else {
