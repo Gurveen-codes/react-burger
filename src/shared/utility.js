@@ -1,3 +1,6 @@
+import React, { Suspense } from 'react';
+import Spinner from '../components/UI/Spinner/Spinner';
+
 export const checkValidity = (value, rules) => {
 	let isValid = true;
 
@@ -20,4 +23,12 @@ export const checkValidity = (value, rules) => {
 	}
 
 	return isValid;
+};
+
+export const lazyLoad = (props, Component) => {
+	return (
+		<Suspense fallback={<Spinner />}>
+			<Component {...props} />
+		</Suspense>
+	);
 };
