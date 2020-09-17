@@ -14,11 +14,12 @@ const AsyncOrders = React.lazy(() => import('./containers/Orders/Orders'));
 const AsyncAuth = React.lazy(() => import('./containers/Auth/Auth'));
 
 const App = (props) => {
+	const { onAutomaticAuthCheck } = props;
 	useEffect(
 		() => {
-			props.onAutomaticAuthCheck();
+			onAutomaticAuthCheck();
 		},
-		[ props ]
+		[ onAutomaticAuthCheck ]
 	);
 
 	let routes = (
