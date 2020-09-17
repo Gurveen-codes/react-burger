@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
+
 import * as actionCreators from '../../store/actions/indexActions';
 import Auxillary from '../../hoc/Auxillary';
 import Burger from '../../components/Burger/Burger';
