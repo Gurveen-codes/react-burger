@@ -1,49 +1,45 @@
-import React, { Component } from 'react';
+import React, { useState, useEffect } from 'react';
 import Auxillary from '../Auxillary';
 import Modal from '../../components/UI/Modal/Modal';
 
 const withErrorHandler = (WrappedComponent, axios) => {
-	return class extends Component {
-		constructor(props) {
-			super(props);
+	return (props) => {
+		const [ error, setError ] = useState(null);
 
-			this.state = {
-				error: null
-			};
-		}
+		const requestInterceptor = axios.interceptors.request.use((req) => {
+			setError(null);
+			return req;
+		});
+		const responseInterceptor = axios.interceptors.response.use(
+			(res) => res,
+			(error) => {
+				setError(error);
+			}
+		);
 
-		UNSAFE_componentWillMount() {
-			this.requestInterceptor = axios.interceptors.request.use((req) => {
-				this.setState({ error: null });
-				return req;
-			});
-			this.responseInterceptor = axios.interceptors.response.use(
-				(res) => res,
-				(error) => {
-					this.setState({ error: error });
-				}
-			);
-		}
+		useEffect(
+			() => {
+				return () => {
+					//Code cleanup
+					axios.interceptors.request.eject(requestInterceptor);
+					axios.interceptors.response.eject(responseInterceptor);
+				};
+			},
+			[ requestInterceptor, responseInterceptor ]
+		);
 
-		errorConfirmedHandler = () => {
-			this.setState({ error: null });
+		const errorConfirmedHandler = () => {
+			setError(null);
 		};
 
-		render() {
-			return (
-				<Auxillary>
-					<Modal backdropClicked={this.errorConfirmedHandler} show={this.state.error}>
-						{this.state.error ? this.state.error.message : null}
-					</Modal>
-					<WrappedComponent {...this.props} />
-				</Auxillary>
-			);
-		}
-
-		componentWillUnmount() {
-			axios.interceptors.request.eject(this.requestInterceptor);
-			axios.interceptors.response.eject(this.responseInterceptor);
-		}
+		return (
+			<Auxillary>
+				<Modal backdropClicked={errorConfirmedHandler} show={error}>
+					{error ? error.message : null}
+				</Modal>
+				<WrappedComponent {...props} />
+			</Auxillary>
+		);
 	};
 };
 
