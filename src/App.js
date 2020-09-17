@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import Layout from './hoc/Layout/Layout';
@@ -13,39 +13,41 @@ const AsyncOrders = React.lazy(() => import('./containers/Orders/Orders'));
 
 const AsyncAuth = React.lazy(() => import('./containers/Auth/Auth'));
 
-export class App extends Component {
-	componentDidMount() {
-		this.props.onAutomaticAuthCheck();
-	}
-	render() {
-		let routes = (
+const App = (props) => {
+	useEffect(
+		() => {
+			props.onAutomaticAuthCheck();
+		},
+		[ props ]
+	);
+
+	let routes = (
+		<Switch>
+			<Route path="/auth" render={(props) => lazyLoad(props, AsyncAuth)} />
+			<Route path="/" component={BurgerBuilder} />
+			<Redirect to="/" />
+		</Switch>
+	);
+
+	if (props.isAuthenticated) {
+		routes = (
 			<Switch>
+				<Route path="/checkout" render={(props) => lazyLoad(props, AsyncCheckout)} />
+				<Route path="/orders" render={(props) => lazyLoad(props, AsyncOrders)} />
 				<Route path="/auth" render={(props) => lazyLoad(props, AsyncAuth)} />
+				<Route path="/logout" component={Logout} />
 				<Route path="/" component={BurgerBuilder} />
 				<Redirect to="/" />
 			</Switch>
 		);
-
-		if (this.props.isAuthenticated) {
-			routes = (
-				<Switch>
-					<Route path="/checkout" render={(props) => lazyLoad(props, AsyncCheckout)} />
-					<Route path="/orders" render={(props) => lazyLoad(props, AsyncOrders)} />
-					<Route path="/auth" render={(props) => lazyLoad(props, AsyncAuth)} />
-					<Route path="/logout" component={Logout} />
-					<Route path="/" component={BurgerBuilder} />
-					<Redirect to="/" />
-				</Switch>
-			);
-		}
-
-		return (
-			<div>
-				<Layout>{routes}</Layout>
-			</div>
-		);
 	}
-}
+
+	return (
+		<div>
+			<Layout>{routes}</Layout>
+		</div>
+	);
+};
 
 const mapStateToProps = (state) => {
 	return {
